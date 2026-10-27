@@ -72,22 +72,71 @@ def create_word_report(output_dir, image_path):
     run_sub.font.size = Pt(13)
     run_sub.font.color.rgb = RGBColor(37, 99, 235) # Blue 600
 
-    # Meta Callout Box
+    # ---------------------------------------------------------
+    # STUDENT INFORMATION TABLE
+    # ---------------------------------------------------------
+    st_table = doc.add_table(rows=1, cols=4)
+    st_table.alignment = WD_TABLE_ALIGNMENT.CENTER
+    st_table.autofit = False
+
+    st_headers = ["Student Full Name", "Academic ID", "Group", "Assigned Project Role"]
+    st_widths = [Inches(2.2), Inches(1.1), Inches(1.1), Inches(2.1)]
+    for i, h_text in enumerate(st_headers):
+        cell = st_table.rows[0].cells[i]
+        cell.text = h_text
+        cell.width = st_widths[i]
+        set_cell_background(cell, "0F172A")
+        p_c = cell.paragraphs[0]
+        p_c.runs[0].font.bold = True
+        p_c.runs[0].font.color.rgb = RGBColor(255, 255, 255)
+        p_c.runs[0].font.size = Pt(9)
+
+    students = [
+        ("Abdelrahman Ibrahim El-Saeed", "42510554", "Group A", "Dashboard Architecture & Visual Design"),
+        ("Ahmed Mohamed Talaat", "42510635", "Group A", "Data Cleaning, Preprocessing & Feature Engineering"),
+        ("Ali wael Mohamed", "42510325", "Group C", "KPI Metrics, Descriptive Elements & Visual Analysis"),
+        ("Ali Mohamed abed", "42510161", "Group C", "Statistical Insights & Findings Interpretation"),
+        ("Ahmed Abdullah elmetwaly", "42510160", "Group C", "Strategic Recommendations & Documentation")
+    ]
+
+    for row_idx, st_row in enumerate(students):
+        row_cells = st_table.add_row().cells
+        bg_col = "F8FAFC" if row_idx % 2 == 0 else "FFFFFF"
+        for i, val in enumerate(st_row):
+            row_cells[i].text = val
+            row_cells[i].width = st_widths[i]
+            set_cell_background(row_cells[i], bg_col)
+            set_cell_margins(row_cells[i], top=50, bottom=50, left=80, right=80)
+            p_cell = row_cells[i].paragraphs[0]
+            p_cell.runs[0].font.size = Pt(8.5)
+            if i == 0:
+                p_cell.runs[0].font.bold = True
+
+    doc.add_paragraph().paragraph_format.space_after = Pt(8)
+
+    # ---------------------------------------------------------
+    # DIRECT SUBMISSION LINKS CALLOUT BOX
+    # ---------------------------------------------------------
     meta_table = doc.add_table(rows=1, cols=1)
     meta_table.alignment = WD_TABLE_ALIGNMENT.CENTER
     meta_cell = meta_table.cell(0, 0)
-    set_cell_background(meta_cell, "F1F5F9")
-    set_cell_margins(meta_cell, top=140, bottom=140, left=200, right=200)
+    set_cell_background(meta_cell, "F0F9FF")
+    set_cell_margins(meta_cell, top=120, bottom=120, left=160, right=160)
     meta_p = meta_cell.paragraphs[0]
     meta_p.paragraph_format.space_after = Pt(0)
-    meta_p.add_run("Course / Assignment: ").bold = True
-    meta_p.add_run("Data Visualization & Business Dashboard Development\n")
-    meta_p.add_run("Submission Deliverables: ").bold = True
-    meta_p.add_run("Interactive HTML Dashboard, High-Res Image/PDF, Cleaned Datasets (CSV/XLSX), Technical Report\n")
-    meta_p.add_run("Dataset Scope: ").bold = True
-    meta_p.add_run("2,500 Omnichannel E-Commerce Orders across North America (2024 - 2025)\n")
-    meta_p.add_run("Implementation Tool: ").bold = True
-    meta_p.add_run("Python (Pandas, Matplotlib, ReportLab, OpenPyXL, HTML5/Chart.js)")
+    meta_p.add_run("🔗 DIRECT SUBMISSION LINKS & ONLINE RESOURCES (CLICK TO OPEN):\n").bold = True
+    meta_p.add_run("• Live Interactive Web Dashboard: ").bold = True
+    meta_p.add_run("https://eng-hegazy.github.io/data-project/  (or HTMLPreview: https://htmlpreview.github.io/?https://github.com/Eng-Hegazy/data-project/blob/main/ecommerce_dashboard.html)\n")
+    meta_p.add_run("• GitHub Project Repository: ").bold = True
+    meta_p.add_run("https://github.com/Eng-Hegazy/data-project\n")
+    meta_p.add_run("• Original Raw Dataset (CSV): ").bold = True
+    meta_p.add_run("https://raw.githubusercontent.com/Eng-Hegazy/data-project/main/ecommerce_sales_raw.csv\n")
+    meta_p.add_run("• Cleaned & Processed Dataset (CSV): ").bold = True
+    meta_p.add_run("https://raw.githubusercontent.com/Eng-Hegazy/data-project/main/ecommerce_sales_cleaned.csv\n")
+    meta_p.add_run("• High-Resolution Dashboard Graphic (PNG / 300 DPI): ").bold = True
+    meta_p.add_run("https://raw.githubusercontent.com/Eng-Hegazy/data-project/main/ecommerce_dashboard.png\n")
+    meta_p.add_run("• Standalone Vector Dashboard (PDF): ").bold = True
+    meta_p.add_run("https://raw.githubusercontent.com/Eng-Hegazy/data-project/main/ecommerce_dashboard.pdf")
 
     doc.add_paragraph().paragraph_format.space_after = Pt(12)
 

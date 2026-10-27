@@ -4,18 +4,36 @@ A comprehensive, production-grade business intelligence dashboard and academic s
 
 ---
 
-## 📁 Repository & Submission Artifacts
+## 👥 Project Team & Student Information
 
-| Deliverable Type | File Name | Description & Submission Role |
-| :--- | :--- | :--- |
-| **Dashboard (PDF)** | [`ecommerce_dashboard.pdf`](ecommerce_dashboard.pdf) | Vector, print-ready executive dashboard layout at 300 DPI. |
-| **Dashboard (Image)** | [`ecommerce_dashboard.png`](ecommerce_dashboard.png) | High-resolution composite image of the complete dashboard. |
-| **Dashboard (Interactive)** | [`ecommerce_dashboard.html`](ecommerce_dashboard.html) | Standalone responsive HTML5/JS dashboard with real-time filters. |
-| **Description Report (Word)**| [`Dashboard_Description_Report.docx`](Dashboard_Description_Report.docx) | Fully styled Microsoft Word report with data dictionary & analysis. |
-| **Description Report (PDF)** | [`Dashboard_Description_Report.pdf`](Dashboard_Description_Report.pdf) | Formal multi-page PDF report with embedded visual figures. |
-| **Dataset (Raw CSV)** | [`ecommerce_sales_raw.csv`](ecommerce_sales_raw.csv) | Original raw transactional dataset (2,505 records). |
-| **Dataset (Cleaned CSV)** | [`ecommerce_sales_cleaned.csv`](ecommerce_sales_cleaned.csv) | Cleaned, deduplicated, and feature-engineered dataset (2,500 records).|
-| **Dataset (Cleaned Excel)** | [`ecommerce_sales_cleaned.xlsx`](ecommerce_sales_cleaned.xlsx) | Excel workbook with formatted headers. |
+| Student Full Name | Academic ID | Group | Assigned Project Role |
+| :--- | :--- | :--- | :--- |
+| **Abdelrahman Ibrahim El-Saeed** | `42510554` | **Group A** | Dashboard Architecture & Visual Design |
+| **Ahmed Mohamed Talaat** | `42510635` | **Group A** | Data Cleaning, Preprocessing & Feature Engineering |
+| **Ali wael Mohamed** | `42510325` | **Group C** | KPI Metrics, Descriptive Elements & Visual Analysis |
+| **Ali Mohamed abed** | `42510161` | **Group C** | Statistical Insights & Findings Interpretation |
+| **Ahmed Abdullah elmetwaly** | `42510160` | **Group C** | Strategic Recommendations & Documentation |
+
+---
+
+## 🔗 Quick Access Submission Links (For Professor / Reviewer)
+
+- 🌐 **Live Interactive Web Dashboard**: [https://eng-hegazy.github.io/data-project/](https://eng-hegazy.github.io/data-project/)  
+  *(Alternative preview via HTMLPreview: [Open Interactive Dashboard](https://htmlpreview.github.io/?https://github.com/Eng-Hegazy/data-project/blob/main/ecommerce_dashboard.html))*
+- 📁 **GitHub Project Repository**: [https://github.com/Eng-Hegazy/data-project](https://github.com/Eng-Hegazy/data-project)
+- 📄 **Master Submission PDF (All-in-One)**: [`Ecommerce_Dashboard_Final_Submission.pdf`](Ecommerce_Dashboard_Final_Submission.pdf)
+- 📝 **Full Description Report (Word .docx)**: [`Dashboard_Description_Report.docx`](Dashboard_Description_Report.docx)
+- 📊 **Original Raw Dataset (CSV)**: [`ecommerce_sales_raw.csv`](ecommerce_sales_raw.csv)
+- 📈 **Cleaned Dataset (CSV)**: [`ecommerce_sales_cleaned.csv`](ecommerce_sales_cleaned.csv)
+- 📑 **Cleaned Dataset (Excel .xlsx)**: [`ecommerce_sales_cleaned.xlsx`](ecommerce_sales_cleaned.xlsx)
+- 🖼️ **High-Resolution Dashboard Image (PNG / 300 DPI)**: [`ecommerce_dashboard.png`](ecommerce_dashboard.png)
+- 📄 **Print-Ready Dashboard PDF**: [`ecommerce_dashboard.pdf`](ecommerce_dashboard.pdf)
+
+---
+
+## 📊 Executive Dashboard Preview
+
+![Dashboard Preview](ecommerce_dashboard.png)
 
 ---
 
@@ -32,8 +50,6 @@ A comprehensive, production-grade business intelligence dashboard and academic s
 
 ## 🛠️ Reproduction Scripts
 
-To regenerate any component from scratch, execute the following Python scripts in order:
-
 ```bash
 # 1. Synthesize the raw multi-year transactional dataset
 python generate_dataset.py
@@ -47,7 +63,7 @@ python generate_static_dashboard.py
 # 4. Generate standalone interactive HTML5 dashboard
 python generate_interactive_dashboard.py
 
-# 5. Generate submission reports (Word & PDF)
+# 5. Generate Word & PDF reports with student metadata
 python generate_report_docx.py
-python generate_report_pdf.py
+python generate_master_submission_pdf.py
 ```
