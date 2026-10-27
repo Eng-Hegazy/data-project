@@ -121,22 +121,24 @@ def create_word_report(output_dir, image_path):
     meta_table.alignment = WD_TABLE_ALIGNMENT.CENTER
     meta_cell = meta_table.cell(0, 0)
     set_cell_background(meta_cell, "F0F9FF")
-    set_cell_margins(meta_cell, top=120, bottom=120, left=160, right=160)
+    set_cell_margins(meta_cell, top=140, bottom=140, left=180, right=180)
     meta_p = meta_cell.paragraphs[0]
     meta_p.paragraph_format.space_after = Pt(0)
-    meta_p.add_run("🔗 DIRECT SUBMISSION LINKS & ONLINE RESOURCES (CLICK TO OPEN):\n").bold = True
-    meta_p.add_run("• Live Interactive Web Dashboard: ").bold = True
-    meta_p.add_run("https://eng-hegazy.github.io/data-project/  (or HTMLPreview: https://htmlpreview.github.io/?https://github.com/Eng-Hegazy/data-project/blob/main/ecommerce_dashboard.html)\n")
-    meta_p.add_run("• GitHub Project Repository: ").bold = True
-    meta_p.add_run("https://github.com/Eng-Hegazy/data-project\n")
-    meta_p.add_run("• Original Raw Dataset (CSV): ").bold = True
+    meta_p.add_run("🔗 DIRECT SUBMISSION & DATASET DOWNLOAD LINKS (CLICKABLE & COPYABLE):\n").bold = True
+    meta_p.add_run("• Original Raw Dataset (Direct Download CSV): ").bold = True
     meta_p.add_run("https://raw.githubusercontent.com/Eng-Hegazy/data-project/main/ecommerce_sales_raw.csv\n")
-    meta_p.add_run("• Cleaned & Processed Dataset (CSV): ").bold = True
+    meta_p.add_run("• Cleaned Dataset (Direct Download CSV): ").bold = True
     meta_p.add_run("https://raw.githubusercontent.com/Eng-Hegazy/data-project/main/ecommerce_sales_cleaned.csv\n")
+    meta_p.add_run("• Cleaned Dataset in Excel (Direct Download .xlsx): ").bold = True
+    meta_p.add_run("https://github.com/Eng-Hegazy/data-project/raw/main/ecommerce_sales_cleaned.xlsx\n")
+    meta_p.add_run("• Live Interactive Web Dashboard: ").bold = True
+    meta_p.add_run("https://eng-hegazy.github.io/data-project/  (Alternative: https://htmlpreview.github.io/?https://github.com/Eng-Hegazy/data-project/blob/main/ecommerce_dashboard.html)\n")
+    meta_p.add_run("• GitHub Full Project Repository: ").bold = True
+    meta_p.add_run("https://github.com/Eng-Hegazy/data-project\n")
+    meta_p.add_run("• Standalone Master Submission PDF: ").bold = True
+    meta_p.add_run("https://github.com/Eng-Hegazy/data-project/blob/main/Ecommerce_Dashboard_Final_Submission.pdf\n")
     meta_p.add_run("• High-Resolution Dashboard Graphic (PNG / 300 DPI): ").bold = True
-    meta_p.add_run("https://raw.githubusercontent.com/Eng-Hegazy/data-project/main/ecommerce_dashboard.png\n")
-    meta_p.add_run("• Standalone Vector Dashboard (PDF): ").bold = True
-    meta_p.add_run("https://raw.githubusercontent.com/Eng-Hegazy/data-project/main/ecommerce_dashboard.pdf")
+    meta_p.add_run("https://raw.githubusercontent.com/Eng-Hegazy/data-project/main/ecommerce_dashboard.png")
 
     doc.add_paragraph().paragraph_format.space_after = Pt(12)
 
