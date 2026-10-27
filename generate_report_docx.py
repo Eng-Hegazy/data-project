@@ -126,7 +126,7 @@ def create_word_report(output_dir, image_path):
     meta_p.paragraph_format.space_after = Pt(0)
     meta_p.add_run("🔗 DIRECT SUBMISSION & DATASET DOWNLOAD LINKS (100% TESTED & VERIFIED):\n").bold = True
     meta_p.add_run("• Live Interactive Web Dashboard: ").bold = True
-    meta_p.add_run("https://htmlpreview.github.io/?https://github.com/Eng-Hegazy/data-project/blob/main/ecommerce_dashboard.html\n")
+    meta_p.add_run("https://eng-hegazy.github.io/data-project/\n")
     meta_p.add_run("• Original Raw Dataset (Direct Download CSV): ").bold = True
     meta_p.add_run("https://raw.githubusercontent.com/Eng-Hegazy/data-project/main/ecommerce_sales_raw.csv\n")
     meta_p.add_run("• Cleaned Dataset (Direct Download CSV): ").bold = True

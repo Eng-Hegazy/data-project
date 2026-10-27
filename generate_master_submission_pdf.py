@@ -217,11 +217,11 @@ def build_pdf(pdf_path, img_path):
             Paragraph("<b>Details / Specifications</b>", table_header_style)
         ],
         [
-            Paragraph("<b>🌐 Live Interactive Dashboard (Browser)</b>", resource_title_style),
+            Paragraph("<b>🌐 Live Interactive Web Dashboard</b>", resource_title_style),
             Paragraph(
-                '<a href="https://htmlpreview.github.io/?https://github.com/Eng-Hegazy/data-project/blob/main/ecommerce_dashboard.html"><b>[OPEN INTERACTIVE DASHBOARD DIRECTLY]</b></a><br/>'
-                '<font color="#1D4ED8"><u>https://htmlpreview.github.io/?https://github.com/Eng-Hegazy/data-project/blob/main/ecommerce_dashboard.html</u></font><br/>'
-                '<font color="#64748B">GitHub File: </font><a href="https://github.com/Eng-Hegazy/data-project/blob/main/ecommerce_dashboard.html"><u>https://github.com/Eng-Hegazy/data-project/blob/main/ecommerce_dashboard.html</u></a>',
+                '<a href="https://eng-hegazy.github.io/data-project/"><b>[OPEN LIVE WEB DASHBOARD]</b></a><br/>'
+                '<font color="#1D4ED8"><u>https://eng-hegazy.github.io/data-project/</u></font><br/>'
+                '<font color="#64748B">Direct File: </font><a href="https://github.com/Eng-Hegazy/data-project/blob/main/ecommerce_dashboard.html"><u>ecommerce_dashboard.html</u></a>',
                 url_text_style
             ),
             Paragraph("Interactive HTML5 dashboard with dynamic filters (Region, Category, Year), live KPI counters, and Chart.js tooltips.", table_cell_style)

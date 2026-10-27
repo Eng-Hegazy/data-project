@@ -19,7 +19,8 @@ A comprehensive, production-grade business intelligence dashboard and academic s
 ## 🔗 Quick Access Submission Links (100% Verified & Tested)
 
 - 🌐 **Live Interactive Web Dashboard (Direct Browser View)**:  
-  👉 **[Open Interactive Dashboard (HTMLPreview)](https://htmlpreview.github.io/?https://github.com/Eng-Hegazy/data-project/blob/main/ecommerce_dashboard.html)**
+  👉 **[https://eng-hegazy.github.io/data-project/](https://eng-hegazy.github.io/data-project/)**  
+  *(Alternative link: [Open Interactive Dashboard via GitHub](https://github.com/Eng-Hegazy/data-project/blob/main/ecommerce_dashboard.html))*
 - 📁 **GitHub Project Repository**: [https://github.com/Eng-Hegazy/data-project](https://github.com/Eng-Hegazy/data-project)
 - 📄 **Master Submission PDF (All-in-One)**: [`Ecommerce_Dashboard_Final_Submission.pdf`](Ecommerce_Dashboard_Final_Submission.pdf)
 - 📊 **Original Raw Dataset (Direct Download CSV)**: [Download Raw CSV](https://raw.githubusercontent.com/Eng-Hegazy/data-project/main/ecommerce_sales_raw.csv)

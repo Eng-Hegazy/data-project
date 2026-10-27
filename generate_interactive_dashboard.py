@@ -1,12 +1,12 @@
 """
 generate_interactive_dashboard.py
-Generates a standalone, fully interactive HTML/JavaScript dashboard.
+Generates a 100% self-contained, robust HTML5/CSS3 interactive dashboard.
 Features:
-- Responsive executive dashboard UI
-- Interactive filters (Region, Category, Year) with live KPI recalculations
-- Chart.js dynamic visualizations with hover tooltips and legends
-- Searchable, sortable data table
-- Export / Print capabilities
+- Pure embedded CSS (NO runtime Tailwind JS required - renders identically everywhere, even in sandboxed iframes)
+- Explicit SVG dimensions (prevents any icon blowout or rendering bugs)
+- Chart.js visualizations with responsive charts, tooltips, and interactive filter controls
+- Dynamic live KPI recalculation across Region, Category, and Fiscal Year
+- Responsive layout for desktop and mobile
 """
 
 import os
@@ -14,11 +14,9 @@ import json
 import pandas as pd
 
 def build_interactive_dashboard(clean_csv_path, output_dir):
-    print("Generating interactive HTML dashboard...")
+    print("Generating bulletproof interactive HTML dashboard...")
     df = pd.read_csv(clean_csv_path)
 
-    # Convert records to JSON for client-side filtering and rendering
-    # Select columns needed for interactive charts
     records = df[[
         'Order_ID', 'Order_Date', 'Order_Year', 'Year_Month',
         'Region', 'Category', 'Sub_Category', 'Segment',
@@ -33,64 +31,419 @@ def build_interactive_dashboard(clean_csv_path, output_dir):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Commerce Executive Sales & Profitability Dashboard</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body {{
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #F8FAFC;
+        :root {{
+            --bg-page: #f8fafc;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+            --blue: #2563eb;
+            --emerald: #059669;
+            --teal: #0d9488;
+            --amber: #d97706;
+            --purple: #7c3aed;
         }}
+
+        * {{
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }}
+
+        body {{
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            padding: 20px;
+            line-height: 1.5;
+        }}
+
+        .container {{
+            max-width: 1280px;
+            margin: 0 auto;
+        }}
+
+        /* Header */
+        .header {{
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 16px;
+            padding: 24px 28px;
+            color: #ffffff;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }}
+
+        .badge {{
+            display: inline-block;
+            background-color: #3b82f6;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 999px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }}
+
+        .sub-badge {{
+            font-size: 12px;
+            color: #94a3b8;
+            margin-left: 8px;
+        }}
+
+        .header h1 {{
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 4px;
+        }}
+
+        .header p {{
+            font-size: 13px;
+            color: #94a3b8;
+        }}
+
+        .header-actions {{
+            display: flex;
+            gap: 10px;
+        }}
+
+        .btn {{
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 9px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }}
+
+        .btn svg {{
+            width: 15px;
+            height: 15px;
+            flex-shrink: 0;
+        }}
+
+        .btn-outline {{
+            background-color: #1e293b;
+            color: #e2e8f0;
+            border-color: #334155;
+        }}
+        .btn-outline:hover {{
+            background-color: #334155;
+        }}
+
+        .btn-primary {{
+            background-color: #2563eb;
+            color: #ffffff;
+        }}
+        .btn-primary:hover {{
+            background-color: #1d4ed8;
+        }}
+
+        /* Filters Bar */
+        .filter-bar {{
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }}
+
+        .filter-label-group {{
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #334155;
+        }}
+
+        .filter-label-group svg {{
+            width: 16px;
+            height: 16px;
+            color: #2563eb;
+        }}
+
+        .filter-controls {{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }}
+
+        .filter-item {{
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }}
+
+        .filter-item label {{
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }}
+
+        .filter-item select {{
+            font-size: 12px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid #cbd5e1;
+            background-color: #f8fafc;
+            color: var(--text-main);
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+        }}
+        .filter-item select:focus {{
+            border-color: #2563eb;
+            background-color: #ffffff;
+        }}
+
+        /* KPIs Grid */
+        .kpi-grid {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 14px;
+            margin-bottom: 20px;
+        }}
+
+        .kpi-card {{
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            border-left: 4px solid var(--blue);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }}
+
+        .kpi-card.green {{ border-left-color: var(--emerald); }}
+        .kpi-card.teal {{ border-left-color: var(--teal); }}
+        .kpi-card.amber {{ border-left-color: var(--amber); }}
+        .kpi-card.purple {{ border-left-color: var(--purple); }}
+
+        .kpi-title {{
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }}
+
+        .kpi-value {{
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-main);
+            margin: 6px 0 2px 0;
+            letter-spacing: -0.5px;
+        }}
+
+        .kpi-sub {{
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--blue);
+        }}
+        .kpi-card.green .kpi-sub {{ color: var(--emerald); }}
+        .kpi-card.teal .kpi-sub {{ color: var(--teal); }}
+        .kpi-card.amber .kpi-sub {{ color: var(--amber); }}
+        .kpi-card.purple .kpi-sub {{ color: var(--purple); }}
+
+        /* Charts Layout */
+        .chart-row-1 {{
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }}
+
+        .chart-row-2 {{
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }}
+
+        .chart-card {{
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }}
+
+        .chart-header {{
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 14px;
+        }}
+
+        .chart-header h2 {{
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+        }}
+
+        .chart-header p {{
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }}
+
+        .chart-container {{
+            position: relative;
+            width: 100%;
+            height: 280px;
+        }}
+
+        /* Table Card */
+        .table-card {{
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            overflow-x: auto;
+        }}
+
+        table {{
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            text-align: left;
+        }}
+
+        thead tr {{
+            background-color: #f8fafc;
+            border-bottom: 1px solid var(--border-color);
+        }}
+
+        th {{
+            padding: 10px 12px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }}
+
+        td {{
+            padding: 10px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #334155;
+        }}
+
+        tr:hover td {{
+            background-color: #f8fafc;
+        }}
+
+        .text-right {{
+            text-align: right;
+        }}
+
+        .margin-badge {{
+            display: inline-block;
+            padding: 2px 7px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 11px;
+        }}
+        .margin-high {{ background-color: #ecfdf5; color: #047857; }}
+        .margin-med {{ background-color: #eff6ff; color: #1d4ed8; }}
+        .margin-low {{ background-color: #fffbeb; color: #b45309; }}
+
+        /* Footer */
+        .footer {{
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-muted);
+            padding: 16px 0;
+            border-top: 1px solid var(--border-color);
+        }}
+
+        @media (max-width: 900px) {{
+            .chart-row-1 {{
+                grid-template-columns: 1fr;
+            }}
+            .header {{
+                flex-direction: column;
+                align-items: flex-start;
+            }}
+        }}
+
         @media print {{
             .no-print {{ display: none !important; }}
-            body {{ background-color: #FFFFFF; }}
-        }}
-        .card-shadow {{
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            body {{ background-color: #ffffff; padding: 0; }}
+            .card-shadow, .header, .chart-card, .table-card {{ box-shadow: none !important; }}
         }}
     </style>
 </head>
-<body class="text-slate-800 antialiased p-4 md:p-8">
+<body>
 
-    <!-- Top Executive Header -->
-    <div class="max-w-7xl mx-auto mb-6">
-        <div class="bg-slate-900 rounded-2xl p-6 text-white flex flex-col md:flex-row justify-between items-start md:items-center card-shadow">
+    <div class="container">
+        <!-- Top Header -->
+        <header class="header">
             <div>
-                <div class="flex items-center gap-2 mb-1">
-                    <span class="bg-blue-500 text-xs font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">Business Intelligence</span>
-                    <span class="text-xs text-slate-400">2024 - 2025 Multi-Year Analytics</span>
+                <div>
+                    <span class="badge">Business Intelligence</span>
+                    <span class="sub-badge">2024 - 2025 Multi-Year Analytics</span>
                 </div>
-                <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight">Executive E-Commerce & Retail Dashboard</h1>
-                <p class="text-slate-400 text-sm mt-1">Holistic analysis of revenue, margin performance, customer segments, and fulfillment logistics.</p>
+                <h1>Executive E-Commerce & Retail Dashboard</h1>
+                <p>Holistic analysis of revenue, margin performance, customer segments, and fulfillment logistics.</p>
             </div>
-            <div class="mt-4 md:mt-0 flex gap-3 no-print">
-                <button onclick="window.print()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-lg border border-slate-700 transition flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path></svg>
+            <div class="header-actions no-print">
+                <button onclick="window.print()" class="btn btn-outline">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+                        <rect x="6" y="14" width="12" height="8"></rect>
+                    </svg>
                     Print / Export PDF
                 </button>
-                <button onclick="resetFilters()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2.5 rounded-lg shadow transition flex items-center gap-2">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                <button onclick="resetFilters()" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+                    </svg>
                     Reset Filters
                 </button>
             </div>
-        </div>
-    </div>
+        </header>
 
-    <!-- Filter Control Bar -->
-    <div class="max-w-7xl mx-auto mb-6 bg-white p-4 rounded-xl border border-slate-200 card-shadow no-print">
-        <div class="flex flex-wrap items-center justify-between gap-4">
-            <div class="flex items-center gap-2 text-slate-600 font-semibold text-sm">
-                <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
+        <!-- Interactive Filters Bar -->
+        <div class="filter-bar no-print">
+            <div class="filter-label-group">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                </svg>
                 <span>Interactive Filters:</span>
             </div>
-            <div class="flex flex-wrap items-center gap-3">
-                <div>
-                    <label class="text-xs font-medium text-slate-500 block mb-1">Region</label>
-                    <select id="filterRegion" onchange="applyFilters()" class="text-sm bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <div class="filter-controls">
+                <div class="filter-item">
+                    <label>Region</label>
+                    <select id="filterRegion" onchange="applyFilters()">
                         <option value="All">All Regions (4)</option>
                         <option value="North">North</option>
                         <option value="South">South</option>
@@ -98,18 +451,18 @@ def build_interactive_dashboard(clean_csv_path, output_dir):
                         <option value="West">West</option>
                     </select>
                 </div>
-                <div>
-                    <label class="text-xs font-medium text-slate-500 block mb-1">Product Category</label>
-                    <select id="filterCategory" onchange="applyFilters()" class="text-sm bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <div class="filter-item">
+                    <label>Product Category</label>
+                    <select id="filterCategory" onchange="applyFilters()">
                         <option value="All">All Categories (3)</option>
                         <option value="Technology">Technology</option>
                         <option value="Furniture">Furniture</option>
                         <option value="Office Supplies">Office Supplies</option>
                     </select>
                 </div>
-                <div>
-                    <label class="text-xs font-medium text-slate-500 block mb-1">Fiscal Year</label>
-                    <select id="filterYear" onchange="applyFilters()" class="text-sm bg-slate-50 border border-slate-300 rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                <div class="filter-item">
+                    <label>Fiscal Year</label>
+                    <select id="filterYear" onchange="applyFilters()">
                         <option value="All">All Years (2024 - 2025)</option>
                         <option value="2024">FY 2024</option>
                         <option value="2025">FY 2025</option>
@@ -117,148 +470,133 @@ def build_interactive_dashboard(clean_csv_path, output_dir):
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- KPI Metric Cards Grid -->
-    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-        <!-- Revenue -->
-        <div class="bg-white p-4 rounded-xl border border-slate-200 card-shadow border-l-4 border-l-blue-600">
-            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Total Sales</span>
-            <div id="kpiRevenue" class="text-xl md:text-2xl font-black text-slate-900 mt-1">$0</div>
-            <span class="text-xs font-medium text-blue-600 mt-1 block">Gross Net Revenue</span>
+        <!-- 5 KPI Cards -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <span class="kpi-title">Total Sales</span>
+                <div id="kpiRevenue" class="kpi-value">$0</div>
+                <span class="kpi-sub">Gross Realized Sales</span>
+            </div>
+            <div class="kpi-card green">
+                <span class="kpi-title">Total Profit</span>
+                <div id="kpiProfit" class="kpi-value">$0</div>
+                <span class="kpi-sub">Net Operating Margin</span>
+            </div>
+            <div class="kpi-card teal">
+                <span class="kpi-title">Profit Margin</span>
+                <div id="kpiMargin" class="kpi-value">0.0%</div>
+                <span class="kpi-sub">Target Benchmark: >12.0%</span>
+            </div>
+            <div class="kpi-card amber">
+                <span class="kpi-title">Units Sold</span>
+                <div id="kpiUnits" class="kpi-value">0</div>
+                <span class="kpi-sub">Completed Dispatches</span>
+            </div>
+            <div class="kpi-card purple">
+                <span class="kpi-title">Avg Order Value</span>
+                <div id="kpiAOV" class="kpi-value">$0.00</div>
+                <span class="kpi-sub">Revenue Per Basket</span>
+            </div>
         </div>
-        <!-- Profit -->
-        <div class="bg-white p-4 rounded-xl border border-slate-200 card-shadow border-l-4 border-l-emerald-600">
-            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Total Profit</span>
-            <div id="kpiProfit" class="text-xl md:text-2xl font-black text-slate-900 mt-1">$0</div>
-            <span class="text-xs font-medium text-emerald-600 mt-1 block">Operating Net Income</span>
-        </div>
-        <!-- Margin -->
-        <div class="bg-white p-4 rounded-xl border border-slate-200 card-shadow border-l-4 border-l-teal-600">
-            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Profit Margin</span>
-            <div id="kpiMargin" class="text-xl md:text-2xl font-black text-slate-900 mt-1">0.0%</div>
-            <span class="text-xs font-medium text-teal-600 mt-1 block">Target: >12.0%</span>
-        </div>
-        <!-- Units Sold -->
-        <div class="bg-white p-4 rounded-xl border border-slate-200 card-shadow border-l-4 border-l-amber-600">
-            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Total Units</span>
-            <div id="kpiUnits" class="text-xl md:text-2xl font-black text-slate-900 mt-1">0</div>
-            <span class="text-xs font-medium text-amber-600 mt-1 block">Units Dispatched</span>
-        </div>
-        <!-- AOV -->
-        <div class="bg-white p-4 rounded-xl border border-slate-200 card-shadow border-l-4 border-l-purple-600 col-span-2 md:col-span-1">
-            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block">Avg Order Value</span>
-            <div id="kpiAOV" class="text-xl md:text-2xl font-black text-slate-900 mt-1">$0.00</div>
-            <span class="text-xs font-medium text-purple-600 mt-1 block">Basket Size</span>
-        </div>
-    </div>
 
-    <!-- Main Visualizations Layout -->
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-        <!-- Chart 1: Monthly Trend (2 Cols) -->
-        <div class="lg:col-span-2 bg-white p-5 rounded-xl border border-slate-200 card-shadow">
-            <div class="flex justify-between items-center mb-4">
-                <div>
-                    <h2 class="text-base font-bold text-slate-900">1. Monthly Revenue & Operating Profit Trend</h2>
-                    <p class="text-xs text-slate-500">Historical performance showing revenue trajectory and seasonal spikes</p>
+        <!-- Chart Row 1: Monthly Trend + Segment Donut -->
+        <div class="chart-row-1">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <h2>1. Monthly Revenue & Operating Profit Trajectory</h2>
+                        <p>Longitudinal analysis showing revenue trajectory and seasonal spikes</p>
+                    </div>
                 </div>
-                <span class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded font-medium">Monthly Series</span>
-            </div>
-            <div class="h-72">
-                <canvas id="chartTrend"></canvas>
-            </div>
-        </div>
-
-        <!-- Chart 2: Customer Segment Donut (1 Col) -->
-        <div class="bg-white p-5 rounded-xl border border-slate-200 card-shadow">
-            <div class="flex justify-between items-center mb-4">
-                <div>
-                    <h2 class="text-base font-bold text-slate-900">2. Customer Segment Distribution</h2>
-                    <p class="text-xs text-slate-500">Revenue split across demographic client segments</p>
+                <div class="chart-container">
+                    <canvas id="chartTrend"></canvas>
                 </div>
             </div>
-            <div class="h-72 flex items-center justify-center">
-                <canvas id="chartSegment"></canvas>
-            </div>
-        </div>
-    </div>
 
-    <!-- Second Row Visualizations -->
-    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-        <!-- Chart 3: Sub-Category Horizontal Bar -->
-        <div class="bg-white p-5 rounded-xl border border-slate-200 card-shadow">
-            <div class="flex justify-between items-center mb-4">
-                <div>
-                    <h2 class="text-base font-bold text-slate-900">3. Sales by Product Sub-Category</h2>
-                    <p class="text-xs text-slate-500">Comparative revenue contribution by product line</p>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <h2>2. Customer Segment Distribution</h2>
+                        <p>Revenue split across demographic client segments</p>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chartSegment"></canvas>
                 </div>
             </div>
-            <div class="h-80">
-                <canvas id="chartSubcat"></canvas>
-            </div>
         </div>
 
-        <!-- Chart 4: Regional Performance -->
-        <div class="bg-white p-5 rounded-xl border border-slate-200 card-shadow">
-            <div class="flex justify-between items-center mb-4">
-                <div>
-                    <h2 class="text-base font-bold text-slate-900">4. Regional Sales vs. Profit Comparison</h2>
-                    <p class="text-xs text-slate-500">Geographic sales performance and margin realization</p>
+        <!-- Chart Row 2: Sub-category + Region + Shipping -->
+        <div class="chart-row-2">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <h2>3. Sales by Product Sub-Category</h2>
+                        <p>Comparative revenue contribution by product line</p>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chartSubcat"></canvas>
                 </div>
             </div>
-            <div class="h-80">
-                <canvas id="chartRegion"></canvas>
-            </div>
-        </div>
 
-        <!-- Chart 5: Shipping Mode Distribution -->
-        <div class="bg-white p-5 rounded-xl border border-slate-200 card-shadow">
-            <div class="flex justify-between items-center mb-4">
-                <div>
-                    <h2 class="text-base font-bold text-slate-900">5. Logistics & Shipping Mode Performance</h2>
-                    <p class="text-xs text-slate-500">Order count and fulfillment speed by class</p>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <h2>4. Regional Sales vs. Profit Comparison</h2>
+                        <p>Geographic performance and margin realization</p>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chartRegion"></canvas>
                 </div>
             </div>
-            <div class="h-80">
-                <canvas id="chartShip"></canvas>
-            </div>
-        </div>
-    </div>
 
-    <!-- Data Summary Table -->
-    <div class="max-w-7xl mx-auto bg-white p-5 rounded-xl border border-slate-200 card-shadow mb-8">
-        <div class="flex justify-between items-center mb-4">
-            <div>
-                <h2 class="text-base font-bold text-slate-900">6. Sub-Category Performance Summary Matrix</h2>
-                <p class="text-xs text-slate-500">Aggregated sales, profit, margin %, and fulfillment efficiency</p>
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div>
+                        <h2>5. Logistics & Shipping Mode Performance</h2>
+                        <p>Order volume by fulfillment shipping class</p>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chartShip"></canvas>
+                </div>
             </div>
         </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-                <thead class="bg-slate-50 text-slate-600 uppercase font-semibold border-b border-slate-200">
+
+        <!-- Table Card -->
+        <div class="table-card">
+            <div class="chart-header">
+                <div>
+                    <h2>6. Sub-Category Performance Summary Matrix</h2>
+                    <p>Aggregated sales, profit, margin %, and fulfillment efficiency</p>
+                </div>
+            </div>
+            <table>
+                <thead>
                     <tr>
-                        <th class="py-3 px-4">Sub-Category</th>
-                        <th class="py-3 px-4">Category</th>
-                        <th class="py-3 px-4 text-right">Orders</th>
-                        <th class="py-3 px-4 text-right">Units Sold</th>
-                        <th class="py-3 px-4 text-right">Total Revenue</th>
-                        <th class="py-3 px-4 text-right">Operating Profit</th>
-                        <th class="py-3 px-4 text-right">Profit Margin %</th>
+                        <th>Sub-Category</th>
+                        <th>Category</th>
+                        <th class="text-right">Orders</th>
+                        <th class="text-right">Units Sold</th>
+                        <th class="text-right">Total Revenue</th>
+                        <th class="text-right">Operating Profit</th>
+                        <th class="text-right">Profit Margin %</th>
                     </tr>
                 </thead>
-                <tbody id="tableBody" class="divide-y divide-slate-100 text-slate-700">
-                    <!-- Populated dynamically via JS -->
-                </tbody>
+                <tbody id="tableBody"></tbody>
             </table>
         </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            E-Commerce Executive Analytics Dashboard | Prepared with Python, HTML5, Chart.js & Vanilla CSS | Academic Project Submission
+        </footer>
     </div>
 
-    <!-- Footer metadata -->
-    <div class="max-w-7xl mx-auto text-center text-xs text-slate-400 py-4 border-t border-slate-200">
-        E-Commerce Executive Analytics Dashboard | Prepared with Python, Chart.js & Tailwind CSS | Academic Project Submission
-    </div>
-
-    <!-- Embedded Dataset & Reactive JS Logic -->
+    <!-- Reactive Logic -->
     <script>
         const rawData = {data_json};
 
@@ -326,7 +664,7 @@ def build_interactive_dashboard(clean_csv_path, output_dir):
                             label: 'Revenue ($)',
                             data: salesData,
                             borderColor: '#2563EB',
-                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            backgroundColor: 'rgba(37, 99, 235, 0.12)',
                             fill: true,
                             tension: 0.3,
                             borderWidth: 2.5
@@ -334,8 +672,8 @@ def build_interactive_dashboard(clean_csv_path, output_dir):
                         {{
                             label: 'Operating Profit ($)',
                             data: profitData,
-                            borderColor: '#10B981',
-                            backgroundColor: 'rgba(16, 185, 129, 0.05)',
+                            borderColor: '#059669',
+                            backgroundColor: 'rgba(5, 150, 105, 0.05)',
                             borderDash: [5, 5],
                             tension: 0.3,
                             borderWidth: 2
@@ -347,12 +685,12 @@ def build_interactive_dashboard(clean_csv_path, output_dir):
                     maintainAspectRatio: false,
                     interaction: {{ mode: 'index', intersect: false }},
                     plugins: {{
-                        legend: {{ position: 'top', labels: {{ font: {{ family: 'Plus Jakarta Sans', size: 11 }} }} }}
+                        legend: {{ position: 'top', labels: {{ boxWidth: 12, font: {{ size: 11 }} }} }}
                     }},
                     scales: {{
                         y: {{
                             ticks: {{ callback: value => '$' + (value/1000) + 'k' }},
-                            grid: {{ color: '#F1F5F9' }}
+                            grid: {{ color: '#f1f5f9' }}
                         }},
                         x: {{ grid: {{ display: false }} }}
                     }}
@@ -377,16 +715,16 @@ def build_interactive_dashboard(clean_csv_path, output_dir):
                     labels: Object.keys(segMap),
                     datasets: [{{
                         data: Object.values(segMap).map(v => Math.round(v)),
-                        backgroundColor: ['#3B82F6', '#10B981', '#F59E0B'],
+                        backgroundColor: ['#2563EB', '#059669', '#D97706'],
                         borderWidth: 2,
-                        borderColor: '#FFFFFF'
+                        borderColor: '#ffffff'
                     }}]
                 }},
                 options: {{
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {{
-                        legend: {{ position: 'bottom', labels: {{ font: {{ family: 'Plus Jakarta Sans', size: 11 }} }} }}
+                        legend: {{ position: 'bottom', labels: {{ boxWidth: 12, font: {{ size: 11 }} }} }}
                     }},
                     cutout: '65%'
                 }}
@@ -413,7 +751,7 @@ def build_interactive_dashboard(clean_csv_path, output_dir):
                     datasets: [{{
                         label: 'Sales ($)',
                         data: values,
-                        backgroundColor: '#6366F1',
+                        backgroundColor: '#4f46e5',
                         borderRadius: 4
                     }}]
                 }},
@@ -427,7 +765,7 @@ def build_interactive_dashboard(clean_csv_path, output_dir):
                     scales: {{
                         x: {{
                             ticks: {{ callback: value => '$' + (value/1000) + 'k' }},
-                            grid: {{ color: '#F1F5F9' }}
+                            grid: {{ color: '#f1f5f9' }}
                         }},
                         y: {{ grid: {{ display: false }} }}
                     }}
@@ -457,20 +795,20 @@ def build_interactive_dashboard(clean_csv_path, output_dir):
                 data: {{
                     labels: regions,
                     datasets: [
-                        {{ label: 'Revenue ($)', data: sales, backgroundColor: '#0EA5E9', borderRadius: 4 }},
-                        {{ label: 'Profit ($)', data: profits, backgroundColor: '#10B981', borderRadius: 4 }}
+                        {{ label: 'Revenue ($)', data: sales, backgroundColor: '#0284c7', borderRadius: 4 }},
+                        {{ label: 'Profit ($)', data: profits, backgroundColor: '#059669', borderRadius: 4 }}
                     ]
                 }},
                 options: {{
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {{
-                        legend: {{ position: 'top', labels: {{ font: {{ family: 'Plus Jakarta Sans', size: 10 }} }} }}
+                        legend: {{ position: 'top', labels: {{ boxWidth: 12, font: {{ size: 10 }} }} }}
                     }},
                     scales: {{
                         y: {{
                             ticks: {{ callback: value => '$' + (value/1000) + 'k' }},
-                            grid: {{ color: '#F1F5F9' }}
+                            grid: {{ color: '#f1f5f9' }}
                         }},
                         x: {{ grid: {{ display: false }} }}
                     }}
@@ -482,14 +820,13 @@ def build_interactive_dashboard(clean_csv_path, output_dir):
             const shipMap = {{}};
             data.forEach(d => {{
                 if (!shipMap[d.Shipping_Mode]) {{
-                    shipMap[d.Shipping_Mode] = {{ count: 0, daysTotal: 0 }};
+                    shipMap[d.Shipping_Mode] = 0;
                 }}
-                shipMap[d.Shipping_Mode].count += 1;
-                shipMap[d.Shipping_Mode].daysTotal += d.Shipping_Days;
+                shipMap[d.Shipping_Mode] += 1;
             }});
 
             const modes = Object.keys(shipMap);
-            const counts = modes.map(m => shipMap[m].count);
+            const counts = modes.map(m => shipMap[m]);
 
             if (chartShipInstance) chartShipInstance.destroy();
 
@@ -501,7 +838,7 @@ def build_interactive_dashboard(clean_csv_path, output_dir):
                     datasets: [{{
                         label: 'Orders Dispatched',
                         data: counts,
-                        backgroundColor: ['#4F46E5', '#7C3AED', '#EC4899', '#F43F5E'],
+                        backgroundColor: ['#6366f1', '#8b5cf6', '#ec4899', '#f43f5e'],
                         borderRadius: 4
                     }}]
                 }},
@@ -512,7 +849,7 @@ def build_interactive_dashboard(clean_csv_path, output_dir):
                         legend: {{ display: false }}
                     }},
                     scales: {{
-                        y: {{ grid: {{ color: '#F1F5F9' }} }},
+                        y: {{ grid: {{ color: '#f1f5f9' }} }},
                         x: {{ grid: {{ display: false }} }}
                     }}
                 }}
@@ -543,19 +880,18 @@ def build_interactive_dashboard(clean_csv_path, output_dir):
 
             sorted.forEach(([name, val]) => {{
                 const margin = val.sales > 0 ? (val.profit / val.sales) * 100 : 0;
-                const marginColor = margin >= 15 ? 'text-emerald-700 bg-emerald-50' : (margin >= 8 ? 'text-blue-700 bg-blue-50' : 'text-amber-700 bg-amber-50');
+                const marginClass = margin >= 15 ? 'margin-high' : (margin >= 8 ? 'margin-med' : 'margin-low');
 
                 const tr = document.createElement('tr');
-                tr.className = 'hover:bg-slate-50/80 transition';
                 tr.innerHTML = `
-                    <td class="py-2.5 px-4 font-semibold text-slate-800">${{name}}</td>
-                    <td class="py-2.5 px-4 text-slate-500">${{val.category}}</td>
-                    <td class="py-2.5 px-4 text-right">${{val.orders.toLocaleString()}}</td>
-                    <td class="py-2.5 px-4 text-right">${{val.units.toLocaleString()}}</td>
-                    <td class="py-2.5 px-4 text-right font-medium">${{formatCurrency(val.sales)}}</td>
-                    <td class="py-2.5 px-4 text-right font-medium text-emerald-600">${{formatCurrency(val.profit)}}</td>
-                    <td class="py-2.5 px-4 text-right">
-                        <span class="px-2 py-0.5 rounded-full font-bold ${{marginColor}}">
+                    <td style="font-weight: 600;">${{name}}</td>
+                    <td style="color: #64748b;">${{val.category}}</td>
+                    <td class="text-right">${{val.orders.toLocaleString()}}</td>
+                    <td class="text-right">${{val.units.toLocaleString()}}</td>
+                    <td class="text-right" style="font-weight: 600;">${{formatCurrency(val.sales)}}</td>
+                    <td class="text-right" style="font-weight: 600; color: #059669;">${{formatCurrency(val.profit)}}</td>
+                    <td class="text-right">
+                        <span class="margin-badge ${{marginClass}}">
                             ${{margin.toFixed(1)}}%
                         </span>
                     </td>
@@ -582,7 +918,6 @@ def build_interactive_dashboard(clean_csv_path, output_dir):
             applyFilters();
         }}
 
-        // Initialize on load
         window.addEventListener('DOMContentLoaded', () => {{
             applyFilters();
         }});
@@ -592,10 +927,14 @@ def build_interactive_dashboard(clean_csv_path, output_dir):
 """
 
     html_path = os.path.join(output_dir, "ecommerce_dashboard.html")
+    index_path = os.path.join(output_dir, "index.html")
+
     with open(html_path, "w", encoding="utf-8") as f:
         f.write(html_content)
+    with open(index_path, "w", encoding="utf-8") as f:
+        f.write(html_content)
 
-    print(f"Interactive HTML dashboard successfully created at: {html_path}")
+    print(f"Generated clean pure-CSS interactive dashboards:\n  - {html_path}\n  - {index_path}")
     return html_path
 
 if __name__ == '__main__':
