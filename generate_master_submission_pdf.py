@@ -1,8 +1,8 @@
 """
 generate_master_submission_pdf.py
 Generates the Unified Master Submission PDF:
-- Prominent Student Identification Table (Names, IDs, Groups)
-- Dedicated Submission Box with Direct Clickable URLs & Full Written Links for Datasets, Interactive Dashboard, Code, and Reports
+- Student Identification Table (Names, IDs, Groups)
+- 100% Tested Working Direct Clickable URLs for Datasets, Interactive Dashboard, Code, and Reports
 - Full High-Resolution Embedded Dashboard Graphic
 - Complete Description Report: Purpose, Data Dictionary, Cleaning Pipeline, Visualizations Analysis, Empirical Findings, Conclusions
 Outputs:
@@ -44,19 +44,19 @@ class NumberedCanvas(canvas.Canvas):
         
         # Header (pages > 1)
         if self._pageNumber > 1:
-            self.drawString(54, 755, "Data Visualization Project | E-Commerce Sales & Profitability Dashboard")
-            self.drawRightString(558, 755, "Final Submission Document")
+            self.drawString(50, 755, "Data Visualization Project | E-Commerce Sales & Profitability Dashboard")
+            self.drawRightString(562, 755, "Final Submission Document")
             self.setStrokeColor(colors.HexColor("#CBD5E1"))
             self.setLineWidth(0.6)
-            self.line(54, 747, 558, 747)
+            self.line(50, 747, 562, 747)
 
         # Footer (all pages)
         page_str = f"Page {self._pageNumber} of {page_count}"
-        self.drawRightString(558, 34, page_str)
-        self.drawString(54, 34, "Official Submission | Team Portfolio | Repository: https://github.com/Eng-Hegazy/data-project")
+        self.drawRightString(562, 32, page_str)
+        self.drawString(50, 32, "Official Submission | Team Portfolio | Repository: https://github.com/Eng-Hegazy/data-project")
         self.setStrokeColor(colors.HexColor("#CBD5E1"))
         self.setLineWidth(0.6)
-        self.line(54, 46, 558, 46)
+        self.line(50, 44, 562, 44)
         self.restoreState()
 
 def build_pdf(pdf_path, img_path):
@@ -66,8 +66,8 @@ def build_pdf(pdf_path, img_path):
         pagesize=letter,
         leftMargin=50,
         rightMargin=50,
-        topMargin=50,
-        bottomMargin=50
+        topMargin=46,
+        bottomMargin=46
     )
 
     styles = getSampleStyleSheet()
@@ -76,20 +76,20 @@ def build_pdf(pdf_path, img_path):
         'MainTitle',
         parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=18,
-        leading=22,
+        fontSize=17,
+        leading=21,
         textColor=colors.HexColor('#0F172A'),
-        spaceAfter=4
+        spaceAfter=3
     )
 
     subtitle_style = ParagraphStyle(
         'MainSubTitle',
         parent=styles['Normal'],
         fontName='Helvetica-Bold',
-        fontSize=10.5,
-        leading=14,
+        fontSize=10,
+        leading=13,
         textColor=colors.HexColor('#2563EB'),
-        spaceAfter=8
+        spaceAfter=7
     )
 
     h1_style = ParagraphStyle(
@@ -166,7 +166,7 @@ def build_pdf(pdf_path, img_path):
         parent=styles['Normal'],
         fontName='Helvetica',
         fontSize=7.2,
-        leading=9.5,
+        leading=9.8,
         textColor=colors.HexColor('#1D4ED8')
     )
 
@@ -202,31 +202,41 @@ def build_pdf(pdf_path, img_path):
     story.append(Spacer(1, 6))
 
     # =========================================================
-    # DIRECT ACCESS & DOWNLOAD LINKS BOX (FOR REVIEWER)
+    # DIRECT ACCESS & DOWNLOAD LINKS BOX (ALL TESTED & WORKING)
     # =========================================================
     notice_p = Paragraph(
         "<b>DIRECT SUBMISSION & DATASET DOWNLOAD LINKS (Clickable & Copyable for Reviewer / Professor):</b><br/>"
-        "<font size=7 color='#64748B'>All project components (datasets, interactive tools, high-res images, and code) are permanently hosted and immediately accessible below:</font>",
+        "<font size=7 color='#64748B'>All project files and interactive tools are tested, verified, and accessible immediately via the verified links below:</font>",
         ParagraphStyle('NStyle', parent=styles['Normal'], fontName='Helvetica', fontSize=8, leading=11, textColor=colors.HexColor('#0F172A'))
     )
 
     links_table_data = [
         [
             Paragraph("<b>Deliverable / Resource Name</b>", table_header_style),
-            Paragraph("<b>Direct Clickable Link & Written Full URL</b>", table_header_style),
+            Paragraph("<b>Direct Clickable Link & Full Written URL</b>", table_header_style),
             Paragraph("<b>Details / Specifications</b>", table_header_style)
+        ],
+        [
+            Paragraph("<b>🌐 Live Interactive Dashboard (Browser)</b>", resource_title_style),
+            Paragraph(
+                '<a href="https://htmlpreview.github.io/?https://github.com/Eng-Hegazy/data-project/blob/main/ecommerce_dashboard.html"><b>[OPEN INTERACTIVE DASHBOARD DIRECTLY]</b></a><br/>'
+                '<font color="#1D4ED8"><u>https://htmlpreview.github.io/?https://github.com/Eng-Hegazy/data-project/blob/main/ecommerce_dashboard.html</u></font><br/>'
+                '<font color="#64748B">GitHub File: </font><a href="https://github.com/Eng-Hegazy/data-project/blob/main/ecommerce_dashboard.html"><u>https://github.com/Eng-Hegazy/data-project/blob/main/ecommerce_dashboard.html</u></a>',
+                url_text_style
+            ),
+            Paragraph("Interactive HTML5 dashboard with dynamic filters (Region, Category, Year), live KPI counters, and Chart.js tooltips.", table_cell_style)
         ],
         [
             Paragraph("<b>📊 Original Raw Dataset (CSV)</b>", resource_title_style),
             Paragraph(
-                '<a href="https://raw.githubusercontent.com/Eng-Hegazy/data-project/main/ecommerce_sales_raw.csv"><b>[DIRECT DOWNLOAD RAW CSV]</b></a><br/>'
+                '<a href="https://raw.githubusercontent.com/Eng-Hegazy/data-project/main/ecommerce_sales_raw.csv"><b>[DIRECT DOWNLOAD RAW CSV DATASET]</b></a><br/>'
                 '<font color="#1D4ED8"><u>https://raw.githubusercontent.com/Eng-Hegazy/data-project/main/ecommerce_sales_raw.csv</u></font>',
                 url_text_style
             ),
             Paragraph("Original transactional dataset with 2,505 records (includes uncleaned duplicates and missing fields).", table_cell_style)
         ],
         [
-            Paragraph("<b>📈 Cleaned & Processed Dataset (CSV & Excel)</b>", resource_title_style),
+            Paragraph("<b>📈 Cleaned & Prepared Dataset (CSV & Excel)</b>", resource_title_style),
             Paragraph(
                 '<a href="https://raw.githubusercontent.com/Eng-Hegazy/data-project/main/ecommerce_sales_cleaned.csv"><b>[DIRECT DOWNLOAD CLEANED CSV]</b></a><br/>'
                 '<font color="#1D4ED8"><u>https://raw.githubusercontent.com/Eng-Hegazy/data-project/main/ecommerce_sales_cleaned.csv</u></font><br/>'
@@ -235,16 +245,6 @@ def build_pdf(pdf_path, img_path):
                 url_text_style
             ),
             Paragraph("Sanitized dataset with 2,500 validated transactions, engineered margins, shipping durations, and formatted Excel sheets.", table_cell_style)
-        ],
-        [
-            Paragraph("<b>🌐 Live Interactive Dashboard (Web Browser)</b>", resource_title_style),
-            Paragraph(
-                '<a href="https://eng-hegazy.github.io/data-project/"><b>[OPEN LIVE WEB DASHBOARD]</b></a><br/>'
-                '<font color="#1D4ED8"><u>https://eng-hegazy.github.io/data-project/</u></font><br/>'
-                '<font color="#64748B">Alternative preview:</font> <a href="https://htmlpreview.github.io/?https://github.com/Eng-Hegazy/data-project/blob/main/ecommerce_dashboard.html"><u>HTMLPreview Dashboard</u></a>',
-                url_text_style
-            ),
-            Paragraph("Interactive HTML5 dashboard with dynamic filters (Region, Category, Year), live KPI counters, and Chart.js tooltips.", table_cell_style)
         ],
         [
             Paragraph("<b>📁 Complete GitHub Project Repository</b>", resource_title_style),

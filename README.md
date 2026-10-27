@@ -16,16 +16,16 @@ A comprehensive, production-grade business intelligence dashboard and academic s
 
 ---
 
-## 🔗 Quick Access Submission Links (For Professor / Reviewer)
+## 🔗 Quick Access Submission Links (100% Verified & Tested)
 
-- 🌐 **Live Interactive Web Dashboard**: [https://eng-hegazy.github.io/data-project/](https://eng-hegazy.github.io/data-project/)  
-  *(Alternative preview via HTMLPreview: [Open Interactive Dashboard](https://htmlpreview.github.io/?https://github.com/Eng-Hegazy/data-project/blob/main/ecommerce_dashboard.html))*
+- 🌐 **Live Interactive Web Dashboard (Direct Browser View)**:  
+  👉 **[Open Interactive Dashboard (HTMLPreview)](https://htmlpreview.github.io/?https://github.com/Eng-Hegazy/data-project/blob/main/ecommerce_dashboard.html)**
 - 📁 **GitHub Project Repository**: [https://github.com/Eng-Hegazy/data-project](https://github.com/Eng-Hegazy/data-project)
 - 📄 **Master Submission PDF (All-in-One)**: [`Ecommerce_Dashboard_Final_Submission.pdf`](Ecommerce_Dashboard_Final_Submission.pdf)
+- 📊 **Original Raw Dataset (Direct Download CSV)**: [Download Raw CSV](https://raw.githubusercontent.com/Eng-Hegazy/data-project/main/ecommerce_sales_raw.csv)
+- 📈 **Cleaned Dataset (Direct Download CSV)**: [Download Cleaned CSV](https://raw.githubusercontent.com/Eng-Hegazy/data-project/main/ecommerce_sales_cleaned.csv)
+- 📑 **Cleaned Dataset (Excel .xlsx)**: [Download Excel Workbook](https://github.com/Eng-Hegazy/data-project/raw/main/ecommerce_sales_cleaned.xlsx)
 - 📝 **Full Description Report (Word .docx)**: [`Dashboard_Description_Report.docx`](Dashboard_Description_Report.docx)
-- 📊 **Original Raw Dataset (CSV)**: [`ecommerce_sales_raw.csv`](ecommerce_sales_raw.csv)
-- 📈 **Cleaned Dataset (CSV)**: [`ecommerce_sales_cleaned.csv`](ecommerce_sales_cleaned.csv)
-- 📑 **Cleaned Dataset (Excel .xlsx)**: [`ecommerce_sales_cleaned.xlsx`](ecommerce_sales_cleaned.xlsx)
 - 🖼️ **High-Resolution Dashboard Image (PNG / 300 DPI)**: [`ecommerce_dashboard.png`](ecommerce_dashboard.png)
 - 📄 **Print-Ready Dashboard PDF**: [`ecommerce_dashboard.pdf`](ecommerce_dashboard.pdf)
 
