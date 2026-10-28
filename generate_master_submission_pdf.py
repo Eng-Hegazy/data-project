@@ -187,7 +187,7 @@ def build_pdf(pdf_path, img_path):
         [Paragraph("Ahmed Mohamed Talaat", table_cell_bold), Paragraph("42510635", table_cell_style), Paragraph("Group A", table_cell_style), Paragraph("Data Cleaning, Preprocessing & Feature Engineering", table_cell_style)],
         [Paragraph("Ali wael Mohamed", table_cell_bold), Paragraph("42510325", table_cell_style), Paragraph("Group C", table_cell_style), Paragraph("KPI Metrics, Descriptive Elements & Visual Analysis", table_cell_style)],
         [Paragraph("Ali Mohamed abed", table_cell_bold), Paragraph("42510161", table_cell_style), Paragraph("Group C", table_cell_style), Paragraph("Statistical Insights & Findings Interpretation", table_cell_style)],
-        [Paragraph("Ahmed Abdullah elmetwaly", table_cell_bold), Paragraph("42510160", table_cell_style), Paragraph("Group C", table_cell_style), Paragraph("Business Recommendations & Technical Documentation", table_cell_style)],
+        [Paragraph("Ahmed Abdullah elmetwaly", table_cell_bold), Paragraph("42510160", table_cell_style), Paragraph("Group E", table_cell_style), Paragraph("Business Recommendations & Technical Documentation", table_cell_style)],
     ]
 
     st_table = Table(student_table_data, colWidths=[165, 75, 65, 207])

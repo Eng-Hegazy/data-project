@@ -96,7 +96,7 @@ def create_word_report(output_dir, image_path):
         ("Ahmed Mohamed Talaat", "42510635", "Group A", "Data Cleaning, Preprocessing & Feature Engineering"),
         ("Ali wael Mohamed", "42510325", "Group C", "KPI Metrics, Descriptive Elements & Visual Analysis"),
         ("Ali Mohamed abed", "42510161", "Group C", "Statistical Insights & Findings Interpretation"),
-        ("Ahmed Abdullah elmetwaly", "42510160", "Group C", "Strategic Recommendations & Documentation")
+        ("Ahmed Abdullah elmetwaly", "42510160", "Group E", "Strategic Recommendations & Documentation")
     ]
 
     for row_idx, st_row in enumerate(students):
