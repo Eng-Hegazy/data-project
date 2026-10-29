@@ -13,6 +13,7 @@ A comprehensive, production-grade business intelligence dashboard and academic s
 | **Ali wael Mohamed** | `42510325` | **Group C** | KPI Metrics, Descriptive Elements & Visual Analysis |
 | **Ali Mohamed abed** | `42510161` | **Group C** | Statistical Insights & Findings Interpretation |
 | **Ahmed Abdullah elmetwaly** | `42510160` | **Group E** | Strategic Recommendations & Documentation |
+| **Yousef Vector** | `42510792` | **Group G** | Data Modeling & Quality Assurance Verification |
 
 ---
 
